@@ -195,7 +195,8 @@
       { centerX: 470, avatarX: 404 },
       { centerX: 736, avatarX: 670 },
     ];
-    const avatarSize = 132;
+    const avatarBaseSize = 132;
+    const avatarSize = avatarBaseSize * 1.2;
     const rowScrollTops = [558, 936, 1316];
     const textOffsets = { name: 27, intro: 62, quota: 118 };
     const textPos = rowScrollTops.flatMap(scrollTop =>
@@ -351,7 +352,7 @@
         const avatar = await loadImage(teacher.avatar);
         const [ax, ay, ah] = avatarBoxes[i];
         const aw = ah * avatar.naturalWidth / avatar.naturalHeight;
-        ctx.drawImage(avatar, ax + (132 - aw) / 2, ay, aw, ah);
+        ctx.drawImage(avatar, ax + (avatarSize - aw) / 2, ay, aw, ah);
 
         const [x, nameY, introY, quotaY] = textPos[i];
         drawCentered(`${teacher.name}/${teacher.subject}`, x, nameY, 190, 30, "#e71910", '"Microsoft YaHei",Arial,sans-serif', "900");
