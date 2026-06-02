@@ -1,0 +1,7 @@
+__pycache__/
+generated/
+exports/
+满班名额生成工具-分享版/
+*.zip
+gitdata/
+.netlify/
