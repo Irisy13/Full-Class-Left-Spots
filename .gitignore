@@ -5,3 +5,4 @@ exports/
 *.zip
 gitdata/
 .netlify/
+node_modules/
