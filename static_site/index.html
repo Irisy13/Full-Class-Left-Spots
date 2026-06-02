@@ -295,25 +295,24 @@
 
     function drawTitleLine(text, x, y, maxWidth) {
       const titleFont = '"华文行楷","STXingkai","KaiTi",serif';
-      drawCentered(text, x, y, maxWidth, 104, "#ffd51f", titleFont, "700");
+      drawCentered(text, x, y, maxWidth, 104, "#ffd51f", titleFont, "500");
     }
 
     function drawQuotaText(quota, x, y) {
       const prefix = "剩余";
       const suffix = "个名额";
-      const maxWidth = 172;
+      const maxWidth = 190;
       const font = '"华文行楷","STXingkai","KaiTi",serif';
-      let textSize = 24;
-      let numberSize = 36;
+      const textSize = 31;
+      let numberSize = 47;
 
-      while (numberSize >= 28) {
+      while (numberSize > textSize) {
         ctx.font = `900 ${textSize}px ${font}`;
         const sideWidth = ctx.measureText(prefix + suffix).width;
         ctx.font = `900 ${numberSize}px ${font}`;
         const numberWidth = ctx.measureText(quota).width;
         if (sideWidth + numberWidth <= maxWidth) break;
-        textSize -= 1;
-        numberSize = Math.round(textSize * 1.5);
+        numberSize -= 1;
       }
 
       ctx.fillStyle = "#ff1b0b";
