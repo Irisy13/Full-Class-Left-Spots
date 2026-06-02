@@ -293,15 +293,57 @@
       ctx.fillText(text, x, y);
     }
 
+    function drawTitleLine(text, x, y, maxWidth) {
+      const titleFont = '"华文行楷","STXingkai","KaiTi",serif';
+      drawCentered(text, x, y, maxWidth, 104, "#ffd51f", titleFont, "700");
+    }
+
+    function drawQuotaText(quota, x, y) {
+      const prefix = "剩余";
+      const suffix = "个名额";
+      const maxWidth = 172;
+      const font = '"华文行楷","STXingkai","KaiTi",serif';
+      let textSize = 24;
+      let numberSize = 36;
+
+      while (numberSize >= 28) {
+        ctx.font = `900 ${textSize}px ${font}`;
+        const sideWidth = ctx.measureText(prefix + suffix).width;
+        ctx.font = `900 ${numberSize}px ${font}`;
+        const numberWidth = ctx.measureText(quota).width;
+        if (sideWidth + numberWidth <= maxWidth) break;
+        textSize -= 1;
+        numberSize = Math.round(textSize * 1.5);
+      }
+
+      ctx.fillStyle = "#ff1b0b";
+      ctx.textAlign = "left";
+      ctx.textBaseline = "middle";
+      ctx.font = `900 ${textSize}px ${font}`;
+      const prefixWidth = ctx.measureText(prefix).width;
+      const suffixWidth = ctx.measureText(suffix).width;
+      ctx.font = `900 ${numberSize}px ${font}`;
+      const numberWidth = ctx.measureText(quota).width;
+      let cursorX = x - (prefixWidth + numberWidth + suffixWidth) / 2;
+
+      ctx.font = `900 ${textSize}px ${font}`;
+      ctx.fillText(prefix, cursorX, y);
+      cursorX += prefixWidth;
+      ctx.font = `900 ${numberSize}px ${font}`;
+      ctx.fillText(quota, cursorX, y + 1);
+      cursorX += numberWidth;
+      ctx.font = `900 ${textSize}px ${font}`;
+      ctx.fillText(suffix, cursorX, y);
+    }
+
     async function render() {
       if (!state.bg) return;
       ctx.clearRect(0, 0, 941, 1672);
       ctx.drawImage(state.bg, 0, 0, 941, 1672);
 
       const titleLines = el("title").value.split(/\n/).filter(Boolean).slice(0, 2);
-      const titleFont = '"华文行楷","STXingkai","KaiTi",serif';
-      drawCentered(titleLines[0] || "", 470, 140, 760, 104, "#ffd51f", titleFont, "900");
-      drawCentered(titleLines[1] || "", 470, 250, 680, 104, "#ffd51f", titleFont, "900");
+      drawTitleLine(titleLines[0] || "", 470, 140, 760);
+      drawTitleLine(titleLines[1] || "", 470, 250, 680);
 
       for (let i = 0; i < state.slots.length; i++) {
         const slot = state.slots[i];
@@ -315,7 +357,7 @@
         const [x, nameY, introY, quotaY] = textPos[i];
         drawCentered(`${teacher.name}/${teacher.subject}`, x, nameY, 190, 30, "#e71910", '"Microsoft YaHei",Arial,sans-serif', "900");
         drawCentered(teacher.intro, x, introY, 180, 19, "#e33b12", '"Microsoft YaHei",Arial,sans-serif', "800");
-        drawCentered(`剩余${slot.quota || "0"}个名额`, x, quotaY, 190, 31, "#ff1b0b", titleFont, "900");
+        drawQuotaText(slot.quota || "0", x, quotaY);
       }
 
       ctx.font = '800 24px "Microsoft YaHei",Arial,sans-serif';
